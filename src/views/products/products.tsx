@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Product } from "@/types";
 import { ProductModal } from "@/views/products/productModal/productModal";
 import { BackToHome } from "@/components/backToHome/backToHome";
@@ -11,6 +11,7 @@ import { PRODUCTS_DATA } from "@/data/productsData";
 
 export const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  
   const {
     currentPage,
     totalPages,
@@ -20,10 +21,27 @@ export const Products: React.FC = () => {
 
   const handleOpenModal = useCallback((product: Product) => {
     setSelectedProduct(product);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedProduct", JSON.stringify(product));
+    }
   }, []);
 
   const handleCloseModal = useCallback(() => {
     setSelectedProduct(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("selectedProduct");
+    }
+  }, []);
+
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedProduct = localStorage.getItem("selectedProduct");
+      if (savedProduct) {
+        setSelectedProduct(JSON.parse(savedProduct));
+      }
+    }
   }, []);
 
   return (
