@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout";
 import { headers } from "next/headers";
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const userAgent = headers().get("user-agent");
+  const userAgent = headers().get("user-agent") ?? undefined;
   return (
     <html lang="en">
       <body>
